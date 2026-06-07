@@ -3,18 +3,40 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "type": "module",
+"scripts": {
+  "dev": "ts-node-dev --respawn --transpile-only --esm src/server.ts",
+  "build": "tsc",
+  "start": "node dist/server.js",
+  "db:migrate": "prisma migrate dev",
+  "db:deploy": "prisma migrate deploy",
+  "db:push": "prisma db push",
+  "db:studio": "prisma studio",
+  "db:generate": "prisma generate"
+},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pointbreak6969/HMS_SERVER.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/pointbreak6969/HMS_SERVER/issues"
+  },
+  "homepage": "https://github.com/pointbreak6969/HMS_SERVER#readme",
   "dependencies": {
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.8.0",
     "dotenv": "^17.4.2",
     "express": "^5.2.1"
   },
   "devDependencies": {
-    "prisma": "^7.8.0"
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.9.2",
+    "prisma": "^7.8.0",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^6.0.3"
   }
 }
