@@ -1,22 +1,51 @@
 generator client {
   provider = "prisma-client"
-  output   = "./src/generated/prisma"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
 }
 
-
 enum Role{
-  ADMIN
-  DOCTOR
-  RECEPTION
-  SUPERADMIN
+  ADMIN 
+  DOCTOR 
+  RECEPTION 
+  SUPERADMIN 
 }
 model User{
-  id String @id @default(uuid())
-  username String @unique
-  password String 
-  role Role @default(RECEPTION)
+  id          String        @id @default(uuid()) 
+  username    String        @unique 
+  password    String 
+  role        Role          @default(RECEPTION) 
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+enum Sex {
+  Male
+  Female
+  Other
+}
+
+enum MaritalStatus {
+  Married
+  Unmarried
+}
+
+model Customer {
+  customer_id    String         @id @default(uuid())
+  fullname       String
+  sex            Sex
+  email          String?
+  dateOfBirth    DateTime
+  age            Int?
+  address        String?
+  phone          String?
+  pan            String?
+  marital_status MaritalStatus?
+  scheme         String?
+  referredBy     String?
+  vat            String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
 }

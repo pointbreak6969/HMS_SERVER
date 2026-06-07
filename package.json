@@ -4,16 +4,16 @@
   "description": "",
   "main": "index.js",
   "type": "module",
-"scripts": {
-  "dev": "ts-node-dev --respawn --transpile-only --esm src/server.ts",
-  "build": "tsc",
-  "start": "node dist/server.js",
-  "db:migrate": "prisma migrate dev",
-  "db:deploy": "prisma migrate deploy",
-  "db:push": "prisma db push",
-  "db:studio": "prisma studio",
-  "db:generate": "prisma generate"
-},
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio",
+    "db:generate": "prisma generate"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/pointbreak6969/HMS_SERVER.git"
@@ -28,15 +28,22 @@
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
+    "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
     "dotenv": "^17.4.2",
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.9.2",
     "prisma": "^7.8.0",
-    "ts-node": "^10.9.2",
-    "ts-node-dev": "^2.0.0",
+    "tsx": "^4.20.6",
     "typescript": "^6.0.3"
   }
 }
