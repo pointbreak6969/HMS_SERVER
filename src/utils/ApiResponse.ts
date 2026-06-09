@@ -1,4 +1,4 @@
-class ApiResponse<T> {
+class APIResponse<T> {
     statusCode: number;
     data: T;
     message: string;
@@ -12,4 +12,4 @@ class ApiResponse<T> {
     }
 }
 
-export { ApiResponse };
+export { APIResponse };
