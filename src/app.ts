@@ -15,8 +15,10 @@ app.use(cookieParser());
 
 
 import userRoutes from "./routes/user.route";
+import customerRoutes from "./routes/customer.route"
+import adminRoutes from "./routes/admin.route"
 app.use("/api/users", userRoutes);
-app.get("/", (req, res) => {
-    res.send("Running");
-});
+app.use("/api/customer", customerRoutes);
+app.use("/api/admin", adminRoutes);
+
 export default app;

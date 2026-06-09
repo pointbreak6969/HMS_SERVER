@@ -1,11 +1,10 @@
 import { NextFunction, Request, Response } from "express";
-import jwt, { JwtPayload } from "jsonwebtoken";
 import {supabaseClient} from "../constant"
 import { APIError } from "../utils/ApiError";
-const SUPABASAE_JWT_SECRET = process.env.SUPABASAE_JWT_SECRET;
+import { User } from "@supabase/supabase-js";
 
 interface AuthRequest extends Request {
-    user?: string | JwtPayload;
+    user?: User | null;
 }
 
 export async function authenticate(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
