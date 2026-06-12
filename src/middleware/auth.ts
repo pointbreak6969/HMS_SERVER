@@ -1,36 +1,38 @@
 import { NextFunction, Request, Response } from "express";
-import {supabaseClient} from "../constant"
 import { APIError } from "../utils/ApiError";
-import { User } from "@supabase/supabase-js";
+import { asyncHandler } from "../utils/asyncHandler";
+import { prisma } from "../lib/prisma";
+import jwt from "jsonwebtoken";
 
-interface AuthRequest extends Request {
-    user?: User | null;
-}
 
-export async function authenticate(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
-    const token = req.headers.authorization?.startsWith("Bearer ")
-        ? req.headers.authorization.slice(7)
-        : undefined;
+const verifyJWT = asyncHandler(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const token =
+        req.cookies?.accessToken ||
+        req.header("Authorization")?.replace("Bearer ", "");
+      if (!token) {
+        throw new APIError(401, "Unauthorized request");
+      }
 
-    // if (!SUPABASAE_JWT_SECRET) {
-    //     res.status(500).json({ message: "JWT secret is not configured" });
-    //     return;
-    // }
-    const {data: {user}, error} = await supabaseClient.auth.getUser(token)
-    if (error || !user) {
-        throw new APIError(401, "Invalid token")
+      const decodedToken = jwt.verify(
+        token,
+        process.env.ACCESS_TOKEN_SECRET as string,
+      );
+      const user = await prisma.user.findUnique({
+        where: { id: (decodedToken as jwt.JwtPayload).userId },
+        omit: { password: true },
+      });
+      if (!user) {
+        throw new APIError(401, "Unauthorized request");
+      }
+      req.user = user;
+      next();
+    } catch (err) {
+      if (err instanceof APIError) throw err;
+      throw new APIError(401, "Invalid or expired access token");
     }
-    if (!user.email_confirmed_at){
-        throw new APIError(403, "Email not verified")
-    }
-    req.user = user;
-    next();
+  },
+);
 
-    // try {
-    //     const decoded = jwt.verify(token, SUPABASAE_JWT_SECRET);
-    //     req.user = decoded;
-    //     next();
-    // } catch (err) {
-    //     res.status(401).json({ message: "Unauthorized" });
-    // }
-}
+export { verifyJWT };

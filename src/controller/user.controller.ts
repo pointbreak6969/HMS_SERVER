@@ -3,6 +3,11 @@ import {APIError} from "../utils/ApiError"
 import {Request, Response} from "express";
 import {prisma} from "../lib/prisma";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+
+const generateAccessToken = (userId: string, username: string, role:string) =>{
+    return jwt.sign({userId, username, role}, process.env.ACCESS_TOKEN_SECRET || "", {expiresIn: "10h"});
+}
 
 const registerUser = asyncHandler(async (req: Request, res: Response) => {
 const {username, password, role} = req.body;
@@ -46,7 +51,9 @@ const isPasswordValid = await bcrypt.compare(password, user.password);
 if (!isPasswordValid) {
     throw new APIError(400, "Invalid username or password");
 }
-res.status(200).json({message: "Login successful", user: {id: user.id, username: user.username, role: user.role}});
+const accessToken = generateAccessToken(user.id.toString(), user.username, user.role);
+
+res.status(200).cookie("accessToken", accessToken, {httpOnly: true, secure: true}).json({message: "Login successful", user: {id: user.id, username: user.username, role: user.role}});
 })
 
 export {registerUser, loginUser}

@@ -21,7 +21,7 @@ model User{
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 }
-enum Sex {
+enum Gender {
   Male
   Female
   Other
@@ -32,10 +32,12 @@ enum MaritalStatus {
   Unmarried
 }
 
+
+
 model Customer {
   customer_id    String         @id @default(uuid())
   fullname       String
-  sex            Sex
+  gender            Gender
   email          String?
   dateOfBirth    DateTime
   age            Int?
